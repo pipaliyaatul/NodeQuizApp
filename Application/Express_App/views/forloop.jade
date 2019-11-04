@@ -1,0 +1,26 @@
+- var fc=5;
+
+-if(fc === 0 )
+	p you have no followers
+-else if (fc === 1)
+	p you have 1 followers
+-else
+	p you have #{fc} followers
+
+
+
+//This is example of mixin to display all the users
+mixin fetch(users)
+	ul 
+	-each user in users
+		li= user
+	
+
+- users=["Apple","HP","Lenovo"];
+mixin fetch(users)
+
+<br>
+
+- users=["Maths","Chemistry","Biology"];
+mixin fetch(users)
+

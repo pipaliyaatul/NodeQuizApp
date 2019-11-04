@@ -1,0 +1,7 @@
+include mixins
+include index
+- computers={company1:"Dell",company2:"HP",company3:"Lenovo"}
+
+ul
+	-each val,key in computers
+		li #{key} : #{val}
