@@ -1,19 +1,47 @@
-var express=require('express');
+var express= require('express');
+var mysql  = require('mysql');
+var app    = express();
+var bodyParser = require('body-parser');
 
-
-var app=express();
-
+//Application Settings
 app.use(express.static('public'));
-
 app.set('view engine','jade');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//Database Connection Configuration
+var connection = mysql.createConnection
+({
+    host     : 'localhost',
+    user     : 'root',
+    password : 'Atul',
+    database : 'test'
+  });
 
 app.get('/',function(request,response)
+{      
+      //connection.connect();
+      connection.query('SELECT username from user', function (error, results, fields) 
+      {
+        if(results[1].username == "admins")
+        {
+            console.log("You are admin Taking you to the admin Page")
+            response.render('index',{title:'Quiz Generator',solution: results[0].username});    
+        }
+        else
+        {
+            console.log("Regular User")
+            response.render('mylist',{solution: results[1].username});
+        }
+        if (error) throw error;
+        console.log('The solution is: ', results[0]);
+      });
+});
+app.get('/index',function(request,response)
 {
 
-    response.render('login');
-    //response.render('index',{title:'My First App',message:'Hello World '});
+    response.render('/NodeQuizApp/Application/Express_App/views/index.jade');
 });
-
 app.get('/mylist',function(request,response)
 {
 
@@ -25,14 +53,10 @@ app.get('/contactus',function(request,response)
     response.render('contactus');
 });
 
-app.get('/loggeinuser/username', function (req, res, next) {
-    // req.url starts with "/foo"
-    res.render("index",{output:req.params.username});
+app.get('/loggeinuser', function (request, response, next) {
+    res.render("/NodeQuizApp/Application/Express_App/views/index.jade");
+    next();
   });
-/*
-app.post('/loggeinuser',function(request,response){ 
-});
-*/
 
 app.listen(3000,function(){
     console.log('I am running on the 3000');
